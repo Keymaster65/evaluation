@@ -18,7 +18,7 @@ RUN cd src && ../apache-maven-3.8.6/bin/mvn package
 
 COPY entrypoint.sh ./
 
-FROM debian:11 as app
+FROM bitnami/minideb as app
 
 # working FROM debian:11 as app
 # working FROM ubuntu:23.04 AS app
