@@ -18,6 +18,7 @@ _buildImage(){
     exit 1
   fi
   echo "Build image"
+  dos2unix entrypoint.sh
   docker build . --target app -t crac-example-jetty
 }
 
