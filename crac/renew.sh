@@ -3,7 +3,7 @@
 #set -x
 
 _checkPoint(){
-  docker exec -ti crac-example-jetty bash -c '$JAVA_HOME/bin/jcmd example-jetty-1.0-SNAPSHOT.jar JDK.checkpoint'
+  docker exec -ti crac-example-vanilla bash -c '$JAVA_HOME/bin/jcmd io.github.keymaster65.copper2go.vanilla.application.Main JDK.checkpoint'
 }
 
 _wait(){
@@ -18,24 +18,24 @@ _buildImage(){
     exit 1
   fi
   echo "Build image"
-  docker build . --target app -t crac-example-jetty
+  docker build . --target app -t crac-example-vanilla
 }
 
 _stopContainer() {
-  docker ps | fgrep -q crac-example-jetty
+  docker ps | fgrep -q crac-example-vanilla
   typeset RC="$?"
   if [ "$RC" = "0" ]; then
     echo "Stop container"
-    docker stop crac-example-jetty > /dev/null 2>&1
+    docker stop crac-example-vanilla > /dev/null 2>&1
   fi
 }
 
 _removeContainer() {
-  docker container ls -a | fgrep -q crac-example-jetty
+  docker container ls -a | fgrep -q crac-example-vanilla
   typeset RC="$?"
   if [ "$RC" = "0" ]; then
     echo "Remove container"
-    docker rm crac-example-jetty > /dev/null 2>&1
+    docker rm crac-example-vanilla > /dev/null 2>&1
   fi
 }
 
@@ -49,22 +49,22 @@ _startContainer() {
   docker run \
     -p8080:8080 \
     -d \
-    --name crac-example-jetty \
+    --name crac-example-vanilla \
     --cap-add SYS_PTRACE \
     --security-opt seccomp:unconfined \
     --security-opt apparmor:unconfined \
     --privileged \
     --mount source=cr,target=/home/app/cr \
-    crac-example-jetty
+    crac-example-vanilla
 }
 
 [ "-h" = "$1" -o "--help" = "$1" ] \
-&& echo "Usage $(basename $0) [-h|--help|--skipImage|-s]" && exit 1
+  && echo "Usage $(basename $0) [-h|--help|--skipImage|-s]" && exit 1
 
 [ "-s" = "$1" -o "--skipImage" = "$1" ] \
-&& typeset skip="1" \
-&& shift \
-&& echo "Skipping build image and remove volume, so no warmup and checkpoint creation needed."
+  && typeset skip="1" \
+  && shift \
+  && echo "Skipping build image and remove volume, so no warmup and checkpoint creation needed."
 
 [ "$*" = "" ] || echo "WARN: Ignore unknown options \"$*\"."
 

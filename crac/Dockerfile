@@ -8,14 +8,11 @@ ENV JAVA_HOME /home/app/openjdk-17-crac+3_linux-x64
 COPY temp/openjdk-17-crac+3_linux-x64.tar.gz ./
 RUN tar -xvzf openjdk-17-crac+3_linux-x64.tar.gz
 
-RUN curl 'https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz' \
-  -o apache-maven-3.8.6-bin.tar.gz
-RUN tar -xvzf apache-maven-3.8.6-bin.tar.gz
+RUN git clone -b experiment/crac https://github.com/Keymaster65/copper2go.git src
 
-RUN git clone -b feature/addLogging https://github.com/Keymaster65/example-jetty.git src
+RUN cd src && ./gradlew :vanilla-application:assemble
 
-RUN cd src && ../apache-maven-3.8.6/bin/mvn package
-
+RUN    tar -xvf src/vanilla-application/build/distributions/vanilla-application.tar
 COPY entrypoint.sh ./
 
 FROM ubuntu:18.04 AS app
@@ -26,8 +23,7 @@ WORKDIR /home/app
 COPY --from=builder /home/app/openjdk-17-crac+3_linux-x64 ./openjdk-17-crac+3_linux-x64
 ENV JAVA_HOME /home/app/openjdk-17-crac+3_linux-x64
 
-COPY --from=builder /home/app/src/target/example-jetty-1.0-SNAPSHOT.jar ./example-jetty-1.0-SNAPSHOT.jar
-COPY --from=builder /home/app/src/target/dependency ./dependency
+COPY --from=builder /home/app/vanilla-application/ ./
 COPY --from=builder /home/app/entrypoint.sh ./
 
 RUN groupadd --gid 1000 app \
