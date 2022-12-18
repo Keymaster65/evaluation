@@ -18,7 +18,11 @@ RUN cd src && ../apache-maven-3.8.6/bin/mvn package
 
 COPY entrypoint.sh ./
 
-FROM ubuntu:18.04 AS app
+FROM debian:11 as app
+
+# working FROM debian:11 as app
+# working FROM ubuntu:23.04 AS app
+# not working FROM ubuntu:23.04 AS app
 
 RUN apt-get update && apt-get install curl -y procps&& rm -rf /var/lib/apt/lists/*
 
@@ -30,8 +34,8 @@ COPY --from=builder /home/app/src/target/example-jetty-1.0-SNAPSHOT.jar ./exampl
 COPY --from=builder /home/app/src/target/dependency ./dependency
 COPY --from=builder /home/app/entrypoint.sh ./
 
-RUN groupadd --gid 1000 app \
-    && useradd --uid 1000 --gid app --password app app \
+RUN groupadd --gid 1010 app \
+    && useradd --uid 1010 --gid app --password app app \
     && mkdir cr \
     && chown app:app cr
 USER app
