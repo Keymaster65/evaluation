@@ -51,9 +51,6 @@ _startContainer() {
     -p8080:8080 \
     -d \
     --name crac-example-jetty \
-    --cap-add SYS_PTRACE \
-    --security-opt seccomp:unconfined \
-    --security-opt apparmor:unconfined \
     --privileged \
     --mount source=cr,target=/home/app/cr \
     crac-example-jetty
@@ -65,13 +62,13 @@ _startContainer() {
 [ "-s" = "$1" -o "--skipImage" = "$1" ] \
 && typeset skip="1" \
 && shift \
-&& echo "Skipping build image and remove volume, so no warmup and checkpoint creation needed."
+&& echo "Skipping build image."
 
 [ "$*" = "" ] || echo "WARN: Ignore unknown options \"$*\"."
 
 cd $(dirname $0)
 _stopContainer
 _removeContainer
-[ "$skip" = "1" ] || _removeVolume
+_removeVolume
 [ "$skip" = "1" ] || _buildImage || exit $?
 _startContainer
