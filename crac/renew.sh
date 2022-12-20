@@ -2,16 +2,6 @@
 
 #set -x
 
-_checkPoint(){
-  docker exec -ti crac-example-vanilla bash -c '$JAVA_HOME/bin/jcmd io.github.keymaster65.copper2go.vanilla.application.Main JDK.checkpoint'
-}
-
-_wait(){
-  while [ "$(curl localhost:8080 2> /dev/null)" != "Hello World" ]; do
-    echo "Waiting for service ..."
-  done
-}
-
 _buildImage(){
   if [ ! -r temp/openjdk-17-crac+3_linux-x64.tar.gz ]; then
     echo "Need JDK file temp/openjdk-17-crac+3_linux-x64.tar.gz."
