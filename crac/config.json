@@ -1,0 +1,18 @@
+{
+  "httpPort": "59665",
+  "maxTickets": "10000",
+  "httpRequestChannelConfigs": {
+    "Pricing.centPerMinute": {
+      "method": "GET",
+      "host": "localhost",
+      "port": "59665",
+      "path": "/copper2go/3/api/twoway/1.0/Pricing"
+    }
+  },
+  "workflowRepositoryConfig": {
+    "branch": "release/3",
+    "workflowGitURI": "https://github.com/Keymaster65/copper2go-workflows.git",
+    "workflowBase": "/src/workflow/java",
+    "checkIntervalSec": "600000"
+  }
+}
