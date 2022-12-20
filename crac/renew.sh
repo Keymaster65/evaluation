@@ -50,9 +50,6 @@ _startContainer() {
     -p8080:8080 \
     -d \
     --name crac-example-vanilla \
-    --cap-add SYS_PTRACE \
-    --security-opt seccomp:unconfined \
-    --security-opt apparmor:unconfined \
     --privileged \
     --mount source=cr,target=/home/app/cr \
     crac-example-vanilla
@@ -71,6 +68,6 @@ _startContainer() {
 cd $(dirname $0)
 _stopContainer
 _removeContainer
-[ "$skip" = "1" ] || _removeVolume
+_removeVolume
 [ "$skip" = "1" ] || _buildImage || exit $?
 _startContainer
