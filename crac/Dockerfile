@@ -8,9 +8,15 @@ ENV JAVA_HOME /home/app/openjdk-17-crac+3_linux-x64
 COPY temp/openjdk-17-crac+3_linux-x64.tar.gz ./
 RUN tar -xvzf openjdk-17-crac+3_linux-x64.tar.gz
 
+ARG CACHEBUST_FORCE=6
+
 RUN git clone -b experiment/crac https://github.com/Keymaster65/copper2go.git src
 
 RUN cd src && ./gradlew :vanilla-application:assemble
+
+ARG CACHEBUST_PULL=35
+
+RUN cd src && git pull && git log && ./gradlew :vanilla-application:assemble
 
 RUN    tar -xvf src/vanilla-application/build/distributions/vanilla-application.tar
 COPY entrypoint.sh ./
