@@ -7,8 +7,11 @@ _checkPoint(){
 }
 
 _wait(){
-  while [ "$(curl localhost:8080 2> /dev/null)" != "Hello World" ]; do
-    echo "Waiting for service ..."
+  echo "Waiting for service ..."
+  typeset RC=1
+  while [ "$RC" != "0" ]; do
+    curl --data Wolf http://localhost:8080   2>&1 | fgrep "Hello World"
+    RC="$?"
   done
 }
 

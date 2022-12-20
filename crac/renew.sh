@@ -2,16 +2,6 @@
 
 #set -x
 
-_checkPoint(){
-  docker exec -ti crac-example-jetty bash -c '$JAVA_HOME/bin/jcmd example-jetty-1.0-SNAPSHOT.jar JDK.checkpoint'
-}
-
-_wait(){
-  while [ "$(curl localhost:8080 2> /dev/null)" != "Hello World" ]; do
-    echo "Waiting for service ..."
-  done
-}
-
 _buildImage(){
   if [ ! -r temp/openjdk-17-crac+3_linux-x64.tar.gz ]; then
     echo "Need JDK file temp/openjdk-17-crac+3_linux-x64.tar.gz."
@@ -19,24 +9,24 @@ _buildImage(){
   fi
   echo "Build image"
   dos2unix entrypoint.sh
-  docker build . --target app -t crac-example-jetty
+  docker build . --target app -t crac-demo
 }
 
 _stopContainer() {
-  docker ps | fgrep -q crac-example-jetty
+  docker ps | fgrep -q crac-demo
   typeset RC="$?"
   if [ "$RC" = "0" ]; then
     echo "Stop container"
-    docker stop crac-example-jetty > /dev/null 2>&1
+    docker stop crac-demo > /dev/null 2>&1
   fi
 }
 
 _removeContainer() {
-  docker container ls -a | fgrep -q crac-example-jetty
+  docker container ls -a | fgrep -q crac-demo
   typeset RC="$?"
   if [ "$RC" = "0" ]; then
     echo "Remove container"
-    docker rm crac-example-jetty > /dev/null 2>&1
+    docker rm crac-demo > /dev/null 2>&1
   fi
 }
 
@@ -50,10 +40,10 @@ _startContainer() {
   docker run \
     -p8080:8080 \
     -d \
-    --name crac-example-jetty \
+    --name crac-demo \
     --privileged \
     --mount source=cr,target=/home/app/cr \
-    crac-example-jetty
+    crac-demo
 }
 
 [ "-h" = "$1" -o "--help" = "$1" ] \
