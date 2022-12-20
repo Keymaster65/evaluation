@@ -8,24 +8,24 @@ _buildImage(){
     exit 1
   fi
   echo "Build image"
-  docker build . --target app -t crac-example-vanilla
+  docker build . --target app -t crac-demo
 }
 
 _stopContainer() {
-  docker ps | fgrep -q crac-example-vanilla
+  docker ps | fgrep -q crac-demo
   typeset RC="$?"
   if [ "$RC" = "0" ]; then
     echo "Stop container"
-    docker stop crac-example-vanilla > /dev/null 2>&1
+    docker stop crac-demo > /dev/null 2>&1
   fi
 }
 
 _removeContainer() {
-  docker container ls -a | fgrep -q crac-example-vanilla
+  docker container ls -a | fgrep -q crac-demo
   typeset RC="$?"
   if [ "$RC" = "0" ]; then
     echo "Remove container"
-    docker rm crac-example-vanilla > /dev/null 2>&1
+    docker rm crac-demo > /dev/null 2>&1
   fi
 }
 
@@ -39,10 +39,10 @@ _startContainer() {
   docker run \
     -p8080:8080 \
     -d \
-    --name crac-example-vanilla \
+    --name crac-demo \
     --privileged \
     --mount source=cr,target=/home/app/cr \
-    crac-example-vanilla
+    crac-demo
 }
 
 [ "-h" = "$1" -o "--help" = "$1" ] \
