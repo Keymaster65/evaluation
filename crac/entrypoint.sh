@@ -20,7 +20,10 @@ if [ ! -f "cr/cppath" ]; then
   java -XX:CRaCCheckpointTo=cr -jar example-jetty-1.0-SNAPSHOT.jar &
   _wait
   _checkPoint
-  sleep 5 # needed for checkpoint to complete
+  while [ ! -f "cr/cppath" ]; do
+    echo "Wait for checkpoint"
+    sleep 1
+   done
 fi
 
 echo "Starting with checkpoint at $(date +%H:%M:%S.%N)"
