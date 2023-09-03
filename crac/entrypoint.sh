@@ -15,8 +15,10 @@ _wait(){
   done
 }
 
+echo "Starting entrypoint at $(date +%H:%M:%S.%N)"
 if [ ! -f "cr/cppath" ]; then
   echo "Starting to warm up at $(date +%H:%M:%S.%N)"
+  time _wait &
   java -XX:CRaCCheckpointTo=cr -jar example-jetty-1.0-SNAPSHOT.jar &
   _wait
   _checkPoint
@@ -27,5 +29,6 @@ if [ ! -f "cr/cppath" ]; then
 fi
 
 echo "Starting with checkpoint at $(date +%H:%M:%S.%N)"
-_wait &
+id
+time _wait &
 java -XX:CRaCRestoreFrom=cr

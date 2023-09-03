@@ -3,8 +3,8 @@
 #set -x
 
 _buildImage(){
-  if [ ! -r temp/openjdk-17-crac+3_linux-x64.tar.gz ]; then
-    echo "Need JDK file temp/openjdk-17-crac+3_linux-x64.tar.gz."
+  if [ ! -r temp/zulu17.42.21-ca-crac-jdk17.0.7-linux_x64.tar.gz ]; then
+    echo "Need JDK file temp/zulu17.42.21-ca-crac-jdk17.0.7-linux_x64.tar.gz."
     exit 1
   fi
   echo "Build image"
