@@ -16,23 +16,18 @@ _wait(){
     RC="$?"
   done
   echo "$logPrefix Service found at  $(date +%H:%M:%S.%N)"
-  curl --data Wolf http://localhost:59665/copper2go/3/api/twoway/2.0/Hello 2>&1 | fgrep "Hello Wolf"
-  curl --data Wolf http://localhost:59665/copper2go/3/api/twoway/2.0/Hello 2>&1 | fgrep "Hello Wolf"
-  curl --data Wolf http://localhost:59665/copper2go/3/api/twoway/2.0/Hello 2>&1 | fgrep "Hello Wolf"
-  time curl --data Wolf http://localhost:59665/copper2go/3/api/twoway/2.0/Hello 2>&1 | fgrep "Hello Wolf"
 }
 
 if [ ! -f "cr/cppath" ]; then
   echo "$logPrefix Starting to warm up container at $(date +%H:%M:%S.%N)"
   export COPPER2GO_APPLICATION_OPTS="-XX:CRaCCheckpointTo=cr"
-  bin/copper2go-application &
-  _wait
-  kill %1
+  time _wait &
   echo "$logPrefix Starting to warm up application at $(date +%H:%M:%S.%N)"
   bin/copper2go-application &
   _wait
-  echo "Now warming up with 100 requests"
-  for i in {1..100}; do
+  typeset noOfRequest="100"
+  echo "Now warming up with $noOfRequest requests"
+  for i in {1..$noOfRequest}; do
     curl --data Wolf http://localhost:59665/copper2go/3/api/twoway/2.0/Hello 2>&1 | fgrep -q "Hello Wolf"
   done
   sleep 20 # wait for git update and warmup finished
@@ -44,5 +39,9 @@ if [ ! -f "cr/cppath" ]; then
 fi
 
 echo "$logPrefix Starting with checkpoint at $(date +%H:%M:%S.%N)"
-_wait &
-java -XX:CRaCRestoreFrom=cr
+time _wait &
+java -XX:CRaCRestoreFrom=cr &
+while [ "1" = "1" ]; do
+  sleep 10
+  time _wait
+done
