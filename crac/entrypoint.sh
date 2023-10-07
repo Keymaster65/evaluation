@@ -40,8 +40,14 @@ fi
 
 echo "$logPrefix Starting with checkpoint at $(date +%H:%M:%S.%N)"
 time _wait &
-java -XX:CRaCRestoreFrom=cr &
-while [ "1" = "1" ]; do
-  sleep 10
-  time _wait
-done
+
+# Add restarts as suggested in
+# https://docs.azul.com/core/crac/crac-debugging
+# for example in case of
+# Error (criu/cr-restore.c:1518): Can't fork for 12: File exists
+# Error (criu/cr-restore.c:2605): Restoring FAILED.
+java -XX:CRaCRestoreFrom=cr \
+|| echo "1st restart due to error $?." ; java -XX:CRaCRestoreFrom=cr \
+|| echo "2nd restart due to error $?." ; java -XX:CRaCRestoreFrom=cr \
+|| echo "3rd estart due to error $?." ; java -XX:CRaCRestoreFrom=cr \
+|| echo "4th and last restart due to error $?." ; java -XX:CRaCRestoreFrom=cr
