@@ -8,7 +8,7 @@ ENV JAVA_HOME /home/app/zulu17.44.55-ca-crac-jdk17.0.8.1-linux_x64
 COPY temp/zulu17.44.55-ca-crac-jdk17.0.8.1-linux_x64.tar.gz ./
 RUN tar -xvzf zulu17.44.55-ca-crac-jdk17.0.8.1-linux_x64.tar.gz
 
-ARG CACHEBUST_FORCE=8
+ARG CACHEBUST_FORCE=19
 
 RUN git clone -b experiment/crac https://github.com/Keymaster65/copper2go.git src
 
