@@ -37,15 +37,16 @@ _removeVolume() {
 _startContainer() {
   echo "Start container"
   docker run \
-    -p59665:59665 \
+    -p59665 \
     -d \
     --name crac-demo \
     --privileged \
     --mount source=cr,target=/home/app/cr \
     -e LOG_LEVEL_WORKFLOW=WARN \
+    -e LOG_LEVEL_COPPER2GO=WARN    \
+    -e LOG_LEVEL_COPPER=WARN \
     -e C2G_CONFIG="$(cat config.json)"     \
     crac-demo
-#    -e LOG_LEVEL_COPPER=DEBUG \
 }
 
 [ "-h" = "$1" -o "--help" = "$1" ] \
