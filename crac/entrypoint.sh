@@ -38,6 +38,8 @@ if [ ! -f "cr/cppath" ]; then
    done
 fi
 
+sleep 10
+
 echo "$logPrefix Starting with checkpoint at $(date +%H:%M:%S.%N)"
 time _wait &
 

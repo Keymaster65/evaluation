@@ -3,8 +3,8 @@
 #set -x
 
 _buildImage(){
-  if [ ! -r temp/openjdk-17-crac+3_linux-x64.tar.gz ]; then
-    echo "Need JDK file temp/openjdk-17-crac+3_linux-x64.tar.gz."
+  if [ ! -r temp/zulu21.28.89-ca-crac-jdk21.0.0-linux_x64.tar.gz ]; then
+    echo "Need JDK file temp/zulu21.28.89-ca-crac-jdk21.0.0-linux_x64.tar.gz."
     exit 1
   fi
   echo "Build image"
@@ -37,7 +37,7 @@ _removeVolume() {
 _startContainer() {
   echo "Start container"
   docker run \
-    -p59665 \
+    -p59665:59665 \
     -d \
     --name crac-demo \
     --privileged \
